@@ -6,6 +6,7 @@ package com.thethelafaltein.casino.api;
 
 import com.thethelafaltein.casino.service.CasinoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,5 +19,10 @@ public class CasinoController {
     @Autowired
     public CasinoController(CasinoService casinoService) {
         this.casinoService = casinoService;
+    }
+
+    @GetMapping(path = "/hello")
+    public String hello(){
+        return "hello";
     }
 }

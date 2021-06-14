@@ -1,6 +1,21 @@
 package com.thethelafaltein.casino.model;
 
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
+@Table
 public class Player {
+    @Id
+    @SequenceGenerator(
+            name = "player_sequence",
+            sequenceName = "player_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "player_sequence"
+    )
     private Long id;
     private String username;
     private String name;
@@ -9,11 +24,13 @@ public class Player {
     private String email;
     private Integer age;
     private Double balance;
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "player")
+    private List<Transaction>transactions;
 
     public Player() {
     }
 
-    public Player(Long id, String username, String name, String surname, String number, String email, Integer age, Double balance) {
+    public Player(Long id, String username, String name, String surname, String number, String email, Integer age, Double balance,List<Transaction>transactions) {
         this.id = id;
         this.username = username;
         this.name = name;
@@ -22,9 +39,10 @@ public class Player {
         this.email = email;
         this.age = age;
         this.balance = balance;
+        this.transactions = transactions;
     }
 
-    public Player(String username, String name, String surname, String number, String email, Integer age, Double balance) {
+    public Player(String username, String name, String surname, String number, String email, Integer age, Double balance,List<Transaction>transactions) {
         this.username = username;
         this.name = name;
         this.surname = surname;
@@ -32,6 +50,7 @@ public class Player {
         this.email = email;
         this.age = age;
         this.balance = balance;
+        this.transactions = transactions;
     }
 
     public Long getId() {
@@ -90,6 +109,14 @@ public class Player {
         this.age = age;
     }
 
+    public void setTransactions(List<Transaction>transactions){
+        this.transactions = transactions;
+    }
+
+    public List<Transaction> getTransactions(){
+        return this.transactions;
+    }
+
     public Double getBalance() {
         return balance;
     }
@@ -112,7 +139,8 @@ public class Player {
                 ", number='" + number + '\'' +
                 ", email='" + email + '\'' +
                 ", age=" + age +
-                ", funds=" + balance +
+                ", balance=" + balance +
+                ", transactions=" + transactions +
                 '}';
     }
 }

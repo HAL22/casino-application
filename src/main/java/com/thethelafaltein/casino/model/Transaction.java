@@ -1,9 +1,95 @@
 package com.thethelafaltein.casino.model;
 
+import javax.persistence.*;
+import java.time.LocalDateTime;
+
+@Entity
+@Table
 public class Transaction {
+    @Id
+    @SequenceGenerator(
+            name = "transaction_sequence",
+            sequenceName = "transaction_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "transaction_sequence"
+    )
     private Long id;
-    private Long playerID;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "player_id", nullable = false)
+    private Player player;
     private String transactionType;
-    private Double balanceBefore;
-    private Double balanceAfter;
+    private Double balanceBeforeTransaction;
+    private Double balanceAfterTransaction;
+    private LocalDateTime transactionDateTime;
+
+    public Transaction() {
+    }
+
+    public Transaction(Player player, String transactionType, Double balanceBeforeTransaction, Double balanceAfterTransaction, LocalDateTime transactionDateTime) {
+        this.player = player;
+        this.transactionType = transactionType;
+        this.balanceBeforeTransaction = balanceBeforeTransaction;
+        this.balanceAfterTransaction = balanceAfterTransaction;
+        this.transactionDateTime = transactionDateTime;
+    }
+
+    public Transaction(Long id, Player player, String transactionType, Double balanceBeforeTransaction, Double balanceAfterTransaction, LocalDateTime transactionDateTime) {
+        this.id = id;
+        this.player = player;
+        this.transactionType = transactionType;
+        this.balanceBeforeTransaction = balanceBeforeTransaction;
+        this.balanceAfterTransaction = balanceAfterTransaction;
+        this.transactionDateTime = transactionDateTime;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public String getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
+    }
+
+    public Double getBalanceBeforeTransaction() {
+        return balanceBeforeTransaction;
+    }
+
+    public void setBalanceBeforeTransaction(Double balanceBeforeTransaction) {
+        this.balanceBeforeTransaction = balanceBeforeTransaction;
+    }
+
+    public Double getBalanceAfterTransaction() {
+        return balanceAfterTransaction;
+    }
+
+    public void setBalanceAfterTransaction(Double balanceAfterTransaction) {
+        this.balanceAfterTransaction = balanceAfterTransaction;
+    }
+
+    public LocalDateTime getTransactionDateTime() {
+        return transactionDateTime;
+    }
+
+    public void setTransactionDateTime(LocalDateTime transactionDateTime) {
+        this.transactionDateTime = transactionDateTime;
+    }
 }
