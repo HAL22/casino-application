@@ -11,10 +11,8 @@ import java.util.Optional;
 
 @Repository
 public interface TransactionRepoistory extends JpaRepository<Transaction,Long> {
-
     @Query("SELECT t FROM Transaction t WHERE t.id = ?1")
     Optional<Transaction> findTransactionById(Long id);
-
     @Query("SELECT t FROM Transaction t WHERE t.player.id = ?1")
     Optional<List<Transaction>> findAllByPlayer(Long playerID);
 }

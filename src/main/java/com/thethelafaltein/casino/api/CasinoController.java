@@ -43,5 +43,4 @@ public class CasinoController {
         return casinoService.getTransactions(username);
     }
 
-
 }

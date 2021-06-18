@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table
 @JsonIgnoreProperties("player")
-public class Transaction {
+public class Transaction{
     @Id
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)

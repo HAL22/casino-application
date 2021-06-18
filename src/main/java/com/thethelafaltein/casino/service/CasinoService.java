@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,7 @@ public class CasinoService {
 
     private PlayerRepository playerRepository;
     private TransactionRepoistory transactionRepoistory;
+    private final String[] TRANSACTION_TYPES = {"Balance","Deposit","Deduct"};
 
     @Autowired
     public CasinoService(PlayerRepository playerRepository, TransactionRepoistory transactionRepoistory) {
@@ -46,7 +48,7 @@ public class CasinoService {
                 Transaction newTransaction = new Transaction(
                         transactionId,
                         player,
-                        "Deposit",
+                        TRANSACTION_TYPES[1],
                         amountBefore,
                         player.getBalance(),
                         LocalDateTime.now()
@@ -76,7 +78,7 @@ public class CasinoService {
                 Transaction newTransaction = new Transaction(
                         transactionId,
                         player,
-                        "Deduct",
+                        TRANSACTION_TYPES[2],
                         amountBefore,
                         player.getBalance(),
                         LocalDateTime.now()
@@ -99,7 +101,7 @@ public class CasinoService {
             Transaction newTransaction = new Transaction(
                     transactionId,
                     player,
-                    "Balance",
+                    TRANSACTION_TYPES[0],
                     player.getBalance(),
                     player.getBalance(),
                     LocalDateTime.now()
@@ -115,19 +117,28 @@ public class CasinoService {
             throw new ApiPlayerException("Player does not exist");
         }
         Player player = playerByUsername.get();
-
         Optional<List<Transaction>>transactionRepoistoryAllByPlayer = transactionRepoistory.findAllByPlayer(player.getId());
-
         List<Transaction>transactionList=null;
-
         if(transactionRepoistoryAllByPlayer.isPresent()){
             transactionList = transactionRepoistoryAllByPlayer.get();
         }
-
-
+        if(transactionList!=null){
+            List<Transaction>removeBalanceTransactions = new ArrayList<>();
+            for(Transaction transaction:transactionList){
+                if(transaction.getTransactionType().equals("Balance")){
+                    removeBalanceTransactions.add(transaction);
+                }
+            }
+            transactionList.removeAll(removeBalanceTransactions);
+            List<Transaction>top10 = new ArrayList<>();
+            if(transactionList.size()>10){
+                for(int i=0;i<10;i++){
+                    top10.add(transactionList.get(i));
+                }
+                transactionList = top10;
+            }
+        }
         return transactionList;
-
-
     }
 
 }
