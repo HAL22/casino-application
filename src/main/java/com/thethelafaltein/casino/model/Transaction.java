@@ -1,21 +1,15 @@
 package com.thethelafaltein.casino.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table
+@JsonIgnoreProperties("player")
 public class Transaction {
     @Id
-    @SequenceGenerator(
-            name = "transaction_sequence",
-            sequenceName = "transaction_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "transaction_sequence"
-    )
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "player_id", nullable = false)

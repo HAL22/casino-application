@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +46,7 @@ public class CasinoService {
                 Transaction newTransaction = new Transaction(
                         transactionId,
                         player,
-                        "Balance",
+                        "Deposit",
                         amountBefore,
                         player.getBalance(),
                         LocalDateTime.now()
@@ -75,7 +76,7 @@ public class CasinoService {
                 Transaction newTransaction = new Transaction(
                         transactionId,
                         player,
-                        "Balance",
+                        "Deduct",
                         amountBefore,
                         player.getBalance(),
                         LocalDateTime.now()
@@ -106,6 +107,27 @@ public class CasinoService {
             transactionRepoistory.save(newTransaction);
         }
         return player.getBalance();
+    }
+
+    public List<Transaction>getTransactions(String username){
+        Optional<Player>playerByUsername = playerRepository.findPlayerByUsername(username);
+        if(!playerByUsername.isPresent()){
+            throw new ApiPlayerException("Player does not exist");
+        }
+        Player player = playerByUsername.get();
+
+        Optional<List<Transaction>>transactionRepoistoryAllByPlayer = transactionRepoistory.findAllByPlayer(player.getId());
+
+        List<Transaction>transactionList=null;
+
+        if(transactionRepoistoryAllByPlayer.isPresent()){
+            transactionList = transactionRepoistoryAllByPlayer.get();
+        }
+
+
+        return transactionList;
+
+
     }
 
 }

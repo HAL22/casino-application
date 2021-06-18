@@ -5,6 +5,7 @@
 package com.thethelafaltein.casino.api;
 
 import com.thethelafaltein.casino.model.Player;
+import com.thethelafaltein.casino.model.Transaction;
 import com.thethelafaltein.casino.service.CasinoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,5 +37,11 @@ public class CasinoController {
     public void deduct(@PathVariable("playerId") Long playerId, @PathVariable("transactionId") Long transactionId, @RequestParam(required = false) Double amount){
         casinoService.deduct(playerId,transactionId,amount);
     }
+
+    @PutMapping(path = "/player/transactions")
+    public List<Transaction> getTransaction(@RequestParam(required = false) String username){
+        return casinoService.getTransactions(username);
+    }
+
 
 }
