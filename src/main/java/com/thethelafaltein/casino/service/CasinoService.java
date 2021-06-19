@@ -25,7 +25,8 @@ public class CasinoService {
 
     private PlayerRepository playerRepository;
     private TransactionRepoistory transactionRepoistory;
-    private final String[] TRANSACTION_TYPES = {"Balance","Deposit","Deduct"};
+
+    public static final String[] TRANSACTION_TYPES = {"Balance","Deposit","Deduct"};
 
     @Autowired
     public CasinoService(PlayerRepository playerRepository, TransactionRepoistory transactionRepoistory) {
